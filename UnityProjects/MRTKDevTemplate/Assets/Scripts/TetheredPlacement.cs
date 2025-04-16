@@ -11,9 +11,6 @@ namespace MixedReality.Toolkit.Examples.Demos
         [SerializeField, Tooltip("The distance from the GameObject's spawn position that will trigger a respawn.")]
         private float distanceThreshold = 20.0f;
 
-        [SerializeField, Tooltip("Optional: Object to activate when colliding with a 'Pot' tag.")]
-        private GameObject objectToActivateOnPotCollision;
-
         private Vector3 localRespawnPosition;
         private Quaternion localRespawnRotation;
         private float distanceThresholdSquared;
@@ -23,12 +20,6 @@ namespace MixedReality.Toolkit.Examples.Demos
             localRespawnPosition = transform.localPosition;
             localRespawnRotation = transform.localRotation;
             distanceThresholdSquared = distanceThreshold * distanceThreshold;
-
-            if (objectToActivateOnPotCollision != null)
-            {
-                objectToActivateOnPotCollision.SetActive(false);
-                Debug.Log("TetheredPlacement: objectToActivateOnPotCollision initialized and deactivated.");
-            }
         }
 
         private void LateUpdate()
@@ -49,12 +40,6 @@ namespace MixedReality.Toolkit.Examples.Demos
             if (collision.gameObject.CompareTag("Pot"))
             {
                 Debug.Log("TetheredPlacement: Collided with Pot.");
-
-                if (objectToActivateOnPotCollision != null)
-                {
-                    objectToActivateOnPotCollision.SetActive(true);
-                    Debug.Log("TetheredPlacement: Activated objectToActivateOnPotCollision.");
-                }
 
                 RespawnNewObject();
             }
