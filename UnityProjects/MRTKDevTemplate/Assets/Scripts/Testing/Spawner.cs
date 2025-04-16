@@ -1,74 +1,62 @@
 using UnityEngine;
 
-public class ObjectSpawner : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
-    public GameObject objectToSpawn;  // The object to spawn (assign in Inspector)
-    public Transform spawnLocation;   // The location on the table to spawn the new object (assign in Inspector)
-    public float spawnRadius = 0.5f;  // Radius to check for overlapping objects (adjust as necessary)
+    public GameObject objectToSpawn;
+    public Transform spawnLocation;
+    public float spawnRadius = 0.5f;
+    public bool useRandomYRotation = false;
 
-    private bool isObjectMoved = false;
-
-    void Start()
+    public void SpawnNewObject()
     {
-        if (objectToSpawn == null)
+        if (objectToSpawn == null || spawnLocation == null)
         {
-            Debug.LogError("Object to spawn is not assigned.");
+            Debug.LogError("Spawner: Missing references.");
+            return;
         }
+
+        Vector3 targetPosition = spawnLocation.position;
+
+        if (!IsSpawnLocationClear(targetPosition))
+        {
+            targetPosition = FindClearPosition(targetPosition);
+        }
+
+        Quaternion rotation = useRandomYRotation
+            ? Quaternion.Euler(0, Random.Range(0f, 360f), 0)
+            : spawnLocation.rotation;
+
+        Instantiate(objectToSpawn, targetPosition, rotation);
     }
 
-    void Update()
-    {
-        // This is where we would check for user input or manipulation in a non-MRTK setup
-        // For this example, we're simulating a simple condition to trigger spawning.
-        if (isObjectMoved == false && Input.GetKeyDown(KeyCode.Space)) // Simulate triggering spawn with Space key
-        {
-            SpawnNewObject();
-            isObjectMoved = true;  // Ensure it only spawns once
-        }
-    }
-
-    // Method to spawn the new object on the table
-    private void SpawnNewObject()
-    {
-        if (objectToSpawn != null && spawnLocation != null)
-        {
-            // Check if the spawn location is clear (no overlapping objects)
-            if (IsSpawnLocationClear(spawnLocation.position))
-            {
-                // Instantiate a new object at the spawn location
-                Instantiate(objectToSpawn, spawnLocation.position, spawnLocation.rotation);
-            }
-            else
-            {
-                Debug.Log("Spawn location is occupied, trying a different spot.");
-                // Optionally, adjust the spawn position slightly if it's occupied
-                Vector3 adjustedPosition = FindClearPosition(spawnLocation.position);
-                Instantiate(objectToSpawn, adjustedPosition, spawnLocation.rotation);
-            }
-        }
-    }
-
-    // Method to check if the spawn location is clear (no colliders in the area)
     private bool IsSpawnLocationClear(Vector3 position)
     {
-        // Use Physics.OverlapSphere to check for existing colliders in the spawn area
         Collider[] colliders = Physics.OverlapSphere(position, spawnRadius);
-        return colliders.Length == 0;  // No colliders means the area is clear
+        return colliders.Length == 0;
     }
 
-    // Method to find a new clear spawn position nearby
     private Vector3 FindClearPosition(Vector3 position)
     {
-        Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));  // Random offset
-        Vector3 newPosition = position + offset;
-
-        // Check again if the new position is clear
-        while (!IsSpawnLocationClear(newPosition))
+        const int maxAttempts = 10;
+        for (int i = 0; i < maxAttempts; i++)
         {
-            offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
-            newPosition = position + offset;
+            Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+            Vector3 newPos = position + offset;
+            if (IsSpawnLocationClear(newPos))
+            {
+                return newPos;
+            }
         }
 
-        return newPosition;
+        return position;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (spawnLocation != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(spawnLocation.position, spawnRadius);
+        }
     }
 }

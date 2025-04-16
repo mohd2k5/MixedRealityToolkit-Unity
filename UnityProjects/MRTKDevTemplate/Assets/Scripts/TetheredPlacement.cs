@@ -1,62 +1,81 @@
-﻿// Copyright (c) Mixed Reality Toolkit Contributors
-// Licensed under the BSD 3-Clause
-
-// Disable "missing XML comment" warning for samples. While nice to have, this XML documentation is not required for samples.
-#pragma warning disable CS1591
-
-
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MixedReality.Toolkit.Examples.Demos
 {
-    /// <summary>
-    /// Helper script to re-spawn objects if they go too far from their original position. 
-    /// </summary>
-    /// <remarks>
-    /// The helper is useful for objects that will fall forever.
-    /// </remarks>
     [AddComponentMenu("MRTK/Examples/Tethered Placement")]
     internal class TetheredPlacement : MonoBehaviour
     {
-        [SerializeField, Tooltip("The distance from the GameObject's spawn position at which will trigger a respawn.")]
+        [SerializeField, Tooltip("The prefab to spawn when respawning.")]
+        private GameObject objectPrefab;
+
+        [SerializeField, Tooltip("The distance from the GameObject's spawn position that will trigger a respawn.")]
         private float distanceThreshold = 20.0f;
+
+        [SerializeField, Tooltip("Optional: Object to activate when colliding with a 'Pot' tag.")]
+        private GameObject objectToActivateOnPotCollision;
 
         private Vector3 localRespawnPosition;
         private Quaternion localRespawnRotation;
-        private Rigidbody rigidBody;
         private float distanceThresholdSquared;
 
-        /// <summary>
-        /// A Unity event function that is called on the frame when a script is enabled just before any of the update methods are called the first time.
-        /// </summary> 
         private void Start()
         {
-            rigidBody = GetComponent<Rigidbody>();
             localRespawnPosition = transform.localPosition;
             localRespawnRotation = transform.localRotation;
             distanceThresholdSquared = distanceThreshold * distanceThreshold;
+
+            if (objectToActivateOnPotCollision != null)
+            {
+                objectToActivateOnPotCollision.SetActive(false);
+                Debug.Log("TetheredPlacement: objectToActivateOnPotCollision initialized and deactivated.");
+            }
         }
 
-        /// <summary>
-        /// A Unity event function that is called every frame after normal update functions, if this object is enabled.
-        /// </summary>
         private void LateUpdate()
         {
             float distanceSqr = (localRespawnPosition - transform.localPosition).sqrMagnitude;
 
             if (distanceSqr > distanceThresholdSquared)
             {
-                // Reset any velocity from falling or moving when re-spawning to original location
-                if (rigidBody != null)
+                Debug.Log("TetheredPlacement: Distance exceeded, respawning.");
+                RespawnNewObject();
+            }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            Debug.Log("TetheredPlacement: Collision with " + collision.gameObject.name);
+
+            if (collision.gameObject.CompareTag("Pot"))
+            {
+                Debug.Log("TetheredPlacement: Collided with Pot.");
+
+                if (objectToActivateOnPotCollision != null)
                 {
-                    rigidBody.velocity = Vector3.zero;
-                    rigidBody.angularVelocity = Vector3.zero;
+                    objectToActivateOnPotCollision.SetActive(true);
+                    Debug.Log("TetheredPlacement: Activated objectToActivateOnPotCollision.");
                 }
 
-                transform.localPosition = localRespawnPosition;
-                transform.localRotation = localRespawnRotation;
+                RespawnNewObject();
             }
+        }
+
+        private void RespawnNewObject()
+        {
+            if (objectPrefab != null)
+            {
+                Transform parent = transform.parent;
+                GameObject newObj = Instantiate(objectPrefab, parent);
+                newObj.transform.localPosition = localRespawnPosition;
+                newObj.transform.localRotation = localRespawnRotation;
+                Debug.Log("TetheredPlacement: Spawned new object.");
+            }
+            else
+            {
+                Debug.LogWarning("TetheredPlacement: objectPrefab not assigned!");
+            }
+
+            Destroy(gameObject);
         }
     }
 }
-#pragma warning restore CS1591
