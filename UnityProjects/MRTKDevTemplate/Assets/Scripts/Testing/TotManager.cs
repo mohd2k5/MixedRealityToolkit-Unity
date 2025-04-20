@@ -1,16 +1,20 @@
 using UnityEngine;
+using UnityEngine.UI; // ✅ Required for Button
 
 namespace MixedReality.Toolkit.Examples.Demos
 {
     [AddComponentMenu("MRTK/Examples/Plant Manager")]
     internal class TotManager : MonoBehaviour
     {
-        private void OnCollisionEnter(Collision collision)
+        private bool hasBeenDestroyed = false;
+
+        public void DestroySelf()
         {
-            if (collision.gameObject.CompareTag("Trash"))
-            {
-                Destroy(gameObject);
-            }
+            if (hasBeenDestroyed) return;
+
+            Debug.Log("TotManager: Destroy button pressed.");
+            hasBeenDestroyed = true;
+            Destroy(gameObject);
         }
     }
 }
