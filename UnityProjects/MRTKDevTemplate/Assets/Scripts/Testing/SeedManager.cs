@@ -24,7 +24,7 @@ namespace MixedReality.Toolkit.Examples.Demos
 
                 if (collisionSpawnPrefab != null)
                 {
-                    Instantiate(collisionSpawnPrefab, transform.position, transform.rotation, transform.parent);
+                    Instantiate(collisionSpawnPrefab, transform.position, transform.rotation, null);
                     Debug.Log("SeedManager: Spawned object from collision.");
                 }
                 else
