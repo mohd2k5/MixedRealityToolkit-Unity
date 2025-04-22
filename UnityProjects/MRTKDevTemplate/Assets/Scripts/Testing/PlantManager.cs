@@ -1,6 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // ✅ For Button
-using TMPro;
+using TMPro; // ✅ For TextMeshPro
 
 namespace MixedReality.Toolkit.Examples.Demos
 {
@@ -15,6 +14,9 @@ namespace MixedReality.Toolkit.Examples.Demos
 
         [SerializeField, Tooltip("Text element to show the countdown.")]
         private TextMeshProUGUI countdownText;
+
+        [SerializeField, Tooltip("Object to destroy when the plant is watered.")]
+        private GameObject objectToDestroy;  // Reference to another object to destroy
 
         private bool hasSpawnedOrDestroyed = false;
         private float timer = 0f;
@@ -63,9 +65,10 @@ namespace MixedReality.Toolkit.Examples.Demos
 
             Debug.Log("PlantManager: Collided with Water.");
 
+            // Spawn the prefab if assigned
             if (objectToSpawn != null)
             {
-                Instantiate(objectToSpawn, transform.position, transform.rotation, transform.parent);
+                Instantiate(objectToSpawn, transform.position, transform.rotation, null);
                 Debug.Log("PlantManager: Spawned new object.");
             }
             else
@@ -73,18 +76,19 @@ namespace MixedReality.Toolkit.Examples.Demos
                 Debug.LogWarning("PlantManager: objectToSpawn is not assigned.");
             }
 
-            hasSpawnedOrDestroyed = true;
-            Destroy(gameObject);
-        }
+            // Destroy another object, if assigned
+            if (objectToDestroy != null)
+            {
+                Destroy(objectToDestroy);
+                Debug.Log("PlantManager: Destroyed the specified object.");
+            }
+            else
+            {
+                Debug.LogWarning("PlantManager: objectToDestroy is not assigned.");
+            }
 
-        // ✅ New public method for manual destruction
-        public void DestroySelf()
-        {
-            if (hasSpawnedOrDestroyed) return;
-
-            Debug.Log("PlantManager: Destroy button pressed.");
             hasSpawnedOrDestroyed = true;
-            Destroy(gameObject);
+            Destroy(gameObject); // Optionally, you can still destroy the PlantManager itself
         }
     }
 }

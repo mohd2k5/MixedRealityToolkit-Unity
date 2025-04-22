@@ -23,7 +23,7 @@ public class Spawner : MonoBehaviour
             return;
         }
 
-        Instantiate(prefabToSpawn, spawnLocation.position, spawnLocation.rotation, spawnLocation.parent);
+        Instantiate(prefabToSpawn, spawnLocation.position, spawnLocation.rotation, null);
         Debug.Log("Spawner: Spawned prefab at target transform.");
     }
 }

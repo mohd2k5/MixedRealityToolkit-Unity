@@ -327,6 +327,8 @@ GameObject:
   - component: {fileID: 1769152232571306384}
   - component: {fileID: 1769152232571306387}
   - component: {fileID: 2149786891485473}
+  - component: {fileID: 3151483700668742180}
+  - component: {fileID: 3638518596379404130}
   m_Layer: 0
   m_Name: Pot
   m_TagString: Pot
@@ -982,6 +984,33 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 0}
   movableAxes: 0
   onMoveDelta: 0.01
+--- !u!65 &3151483700668742180
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838661297079786476}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.5, y: 2.3, z: 2.5}
+  m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!114 &3638518596379404130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838661297079786476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 103fac2bdd125924fb0c6fb5fcbd3375, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionSpawnPrefab: {fileID: 5779484918152796748, guid: af6a9066c1c6ff2499741f925c08d181, type: 3}
+  objectToDestroy: {fileID: 6739675610188076565}
 --- !u!1 &1027067173152631503
 GameObject:
   m_ObjectHideFlags: 0
@@ -2832,9 +2861,8 @@ MonoBehaviour:
   <OnClicked>k__BackingField:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4065153698183291379}
-        m_TargetAssemblyTypeName: MixedReality.Toolkit.Examples.Demos.SeedManager,
-          Assembly-CSharp
+      - m_Target: {fileID: 3904403918855177498}
+        m_TargetAssemblyTypeName: MixedReality.Toolkit.Examples.Demos.Dispose, Assembly-CSharp
         m_MethodName: DestroySelf
         m_Mode: 1
         m_Arguments:
@@ -4459,7 +4487,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4775061438420996916}
   m_LocalRotation: {x: -0, y: 0.5, z: -0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: 0, z: -0.5000004}
+  m_LocalPosition: {x: 0, y: 0, z: -0.5}
   m_LocalScale: {x: 0.014285717, y: 0.014285717, z: 0.014285717}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4469,7 +4497,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 60, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 2095.4731, y: 19467.117}
+  m_AnchoredPosition: {x: -1.3, y: 0}
   m_SizeDelta: {x: 176.7739, y: 252.0061}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4775061438420996919
@@ -4545,7 +4573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3910e248d6210469c6180544364bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetPot: {fileID: 6739675610187582005}
+  targetPot: {fileID: 65397495659708758}
   positionOffset: {x: -1.3, y: 0, z: -0.5}
   rotationOffset: {x: 0, y: 60, z: 0}
 --- !u!1 &4775061438429566354
@@ -5289,8 +5317,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6739675610187582005}
-  - component: {fileID: 4065153698183291379}
-  - component: {fileID: 8757770786731921714}
+  - component: {fileID: 3904403918855177498}
   m_Layer: 0
   m_Name: Pot
   m_TagString: Untagged
@@ -5305,7 +5332,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6739675610188076565}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.34, y: 1.376, z: 0.681}
   m_LocalScale: {x: 0.07, y: 0.07, z: 0.07}
   m_ConstrainProportionsScale: 0
@@ -5315,7 +5342,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4065153698183291379
+--- !u!114 &3904403918855177498
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5324,23 +5351,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6739675610188076565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 103fac2bdd125924fb0c6fb5fcbd3375, type: 3}
+  m_Script: {fileID: 11500000, guid: 254ff5b02110687408d64f5521202e7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionSpawnPrefab: {fileID: 5779484918152796748, guid: af6a9066c1c6ff2499741f925c08d181, type: 3}
---- !u!65 &8757770786731921714
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6739675610188076565}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.5, y: 2.3, z: 2.5}
-  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &6746036981625560870
 GameObject:
   m_ObjectHideFlags: 0
